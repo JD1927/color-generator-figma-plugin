@@ -1,0 +1,105 @@
+<h1>Color Tint Generator</h1>
+
+<form id="pluginForm">
+  <fieldset>
+    <legend>Color information</legend>
+    <p>
+      <label for="colorCode">Color</label>
+      <input type="color" id="colorCode" name="colorCode" value="#F65446">
+    </p>
+    <p>
+      <label for="colorName">Color name</label>
+      <input type="text" id="colorName" name="colorName" value="Primary" placeholder="Whatever name you like">
+    </p>
+    <p>
+      <label for="tintNumber">Number of tints</label>
+      <input type="number" id="tintNumber" name="tintNumber" value="10" min="1" max="10">
+    </p>
+  </fieldset>
+  <fieldset>
+    <legend>Frame information</legend>
+    <p>
+      <label for="circleSize">Circle size</label>
+      <input type="number" value="120" min="48" id="circleSize" name="circleSize">
+    </p>
+    <p>
+      <label for="circleSpacing">Circle spacing</label>
+      <input type="number" value="32" min="0" id="circleSpacing" name="circleSpacing">
+    </p>
+    <p>
+      <label>Choose the frame orientation</label>
+      <input type="radio" name="direction" id="frameHorizontal" checked>
+      <label for="frame">Horizontal</label>
+      <input type="radio" name="direction" id="frameVertical">
+      <label for="frame">Vertical</label>
+    </p>
+  </fieldset>
+
+  <input type="hidden" name="frameDirection" value="horizontal">
+
+  <button id="generateTints">GENERATE</button>
+  <button id="cancelTints">CANCEL</button>
+</form>
+
+<script>
+  const $ = (element) => document.querySelector(element);
+  const generateButton = $('#generateTints');
+  const cancelButton = $('#cancelTints');
+
+  generateButton.onclick = (event) => {
+    // Get the form
+    const pluginForm = $('#pluginForm');
+    // Get the form data
+    const pluginFormData = new FormData(pluginForm);
+
+    // Update the frameDirection value if it's vertical
+    // We're doing this because radio buttons don't work very well with FormData
+    if ($('#frameVertical').checked) {
+      pluginFormData.set('frameDirection', 'vertical');
+    }
+    // Create object and populate it with the form data
+    const formDataObj = {};
+
+    for (const [key, value] of pluginFormData) {
+      formDataObj[key] = value;
+    }
+    console.log({ formDataObj });
+    parent.postMessage(
+      {
+        pluginMessage: {
+          type: 'GENERATE',
+          payload: formDataObj
+        }
+      }, '*'
+    );
+  };
+  cancelButton.onclick = (event) => {
+    parent.postMessage({ pluginMessage: { type: 'CANCEL' } }, '*');
+  };
+</script>
+<style>
+  label {
+    display: block;
+  }
+
+  body {
+    color: #222;
+    background: #fff;
+    font: 100% system-ui;
+  }
+
+  a {
+    color: #0033cc;
+  }
+
+  @media (prefers-color-scheme: dark) {
+    body {
+      color: #eee;
+      background: #121212;
+    }
+
+    body a {
+      color: #809fff;
+    }
+  }
+</style>

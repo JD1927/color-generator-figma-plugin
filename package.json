@@ -1,0 +1,16 @@
+{
+  "name": "color-generator-figma-plugin",
+  "version": "1.0.0",
+  "description": "This is just Figma plugin to generate a color pallette",
+  "main": "code.js",
+  "scripts": {
+    "build": "tsc -p tsconfig.json",
+    "watch": "npm run build -- --watch"
+  },
+  "author": "",
+  "license": "",
+  "devDependencies": {
+    "@figma/plugin-typings": "^1.51.0",
+    "typescript": "*"
+  }
+}
